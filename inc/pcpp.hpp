@@ -23,6 +23,9 @@ extern void arg(int argc, char *argv);
 #include <readline/history.h>
 #include <readline/readline.h>
 
+#include <csignal>
+
+extern void signal_handler(int sig);
 extern int yylex();
 extern char *yytext;
 extern char *yyfile;
