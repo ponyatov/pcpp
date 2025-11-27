@@ -15,3 +15,5 @@
 - create empty project (atom regex name)
 - create own fork of public project
 - clone your own clone into `ref/`
+
+![[file structure]]
