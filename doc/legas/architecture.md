@@ -1,0 +1,38 @@
+# [[legas]] architecture
+
+- [[host language]]
+	- [[lang/metaprogramming|metaprogramming]] core for the entire system
+- syntax processing components:
+	- [[syntax/lexer|lexer]]
+	- [[syntax/parser|parser]]
+- [[code graph database]]
+	- code components, their dependencies and interactions
+- analysis passes:
+	- [[Semantic Analysis]]
+		- transforms [[syntax/AST|AST]] into
+		- language-agnostic [[semantic]] representation layer
+	- [[Dataflow Analysis]]
+		- builds [[dataflow graph]] that tracks data structures usage and dependencies (including function/module/node local data, shares, and databases)
+	- [[type/type inference|Type Inference]]
+		- recovers type hierarchy shared across the project under analysis
+		- generates types & API specification in language-agnostic [[legas/TAPI]] format
+	- [[Program Structure Analysis]]
+		- infers program logical modules hierarchy from project file system and cross-file data/call dependencies
+- [[DSL Workbench]]
+	- provides tools for making custom domain-specific language for refurbished system [[lang/scripting|scripting]] & [[lang/REPL|REPL]] control
+	- modular/distributed [[vm/VM|VM]] generation
+- [[UI builder]]
+	- [[gui/GUI|GUI]] constructor for [[Web/Web|Web]]-based services, and native desktop
+- [[lang/code generation|code generation]]
+	- low-level C/C++
+		- [[em/MCU|MCU]] nodes
+		- high-speed [[Web/backend|backend]]
+		- native [[gui/GUI|GUI]]
+		- [[ML/ML|ML]] & intensive computations
+	- [[JavaScript]] & [[WASM/WASM|WASM]]
+		- [[Web/frontend|frontend]] components
+		- [[MongoDB]] queries & scripting
+	- [[pg/PL|PL]]/[[pgSQL]]
+		- [[PostgreSQL]] queries, management & stored procedures
+	- [[Python]]
+		- side-scripting API library
