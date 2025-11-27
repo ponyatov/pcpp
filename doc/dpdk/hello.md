@@ -3,7 +3,7 @@
 
 https://doc.dpdk.org/guides/linux_gsg/linux_eal_parameters.html
 
-The core of the application consists of two main parts: initializing the [[DPDK]] Environment Abstraction Layer ([[EAL]]) and launching a function on each [[Lcore]]
+The core of the application consists of two main parts: initializing the [[DPDK]] Environment Abstraction Layer ([[EAL]]) and launching a function on each [[lcore]]
 
 [[EAL]] parameters:
 - `lcores`

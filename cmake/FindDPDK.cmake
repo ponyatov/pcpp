@@ -1,4 +1,4 @@
-include(FindPackageHandleStandardArgs)
+# include(FindPackageHandleStandardArgs)
 
 # ~~~
 # - Try to find DPDK include dirs and libraries
@@ -12,15 +12,21 @@ include(FindPackageHandleStandardArgs)
 #  DPDK_VERSION, the version of the library
 # ~~~
 
-# Try to find DPDK with pkg-config first!
-find_package(PkgConfig QUIET)
-if(PKG_CONFIG_FOUND)
-  pkg_check_modules(DPDK QUIET IMPORTED_TARGET libdpdk>=22.11)
-endif()
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(DPDK REQUIRED libdpdk>=22.11)
+# if(PKG_CONFIG_FOUND)
+#   pkg_check_modules(DPDK QUIET IMPORTED_TARGET libdpdk>=22.11)
+# endif()
 
-# We found using Pkg-Config!
 if(DPDK_FOUND)
-  message("-- Found DPDK: with pkg-config (found version ${DPDK_VERSION})")
+  message("-- | DPDK: ${DPDK_VERSION}")
+
+  add_library(DPDK::DPDK INTERFACE IMPORTED)
+
+  target_include_directories(DPDK::DPDK INTERFACE ${DPDK_INCLUDE_DIRS})
+  target_compile_options(DPDK::DPDK INTERFACE ${DPDK_CFLAGS_OTHER})
+  target_link_libraries(DPDK::DPDK INTERFACE ${DPDK_LIBRARIES})
+
   if(DPDK_DEBUG)
     message("-----------")
     message("Libraries: ${DPDK_LIBRARIES}")
@@ -33,5 +39,6 @@ if(DPDK_FOUND)
     message("Version: ${DPDK_VERSION}")
     message("-----------")
   endif()
-    list(APPEND LIBS ${DPDK_LINK_LIBRARIES})
+    list(APPEND INC ${DPDK_INCLUDE_DIRS})
+    list(APPEND L ${DPDK_LINK_LIBRARIES})
 endif()

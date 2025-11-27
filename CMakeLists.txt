@@ -27,7 +27,8 @@ add_executable(${CMAKE_PROJECT_NAME}
 set_source_files_properties(${INI} PROPERTIES HEADER_FILE_ONLY TRUE)
 
 target_link_libraries(${CMAKE_PROJECT_NAME}
-    -Wl,--start-group ${L} -Wl,--end-group
+    PRIVATE DPDK::DPDK READLINE::READLINE
+    # -Wl,--start-group ${L} -Wl,--end-group
 ) # -static
 
 include(install) # target install
