@@ -1,29 +1,5 @@
 #include "pcpp.hpp"
 
-void rl_init() {
-    rl_readline_name = APP;
-    rl_bind_key('\t', rl_complete);       // filename completion (by default)
-    read_history("tmp/" APP ".history");  // load
-    stifle_history(10);                   // keep last N commands
-}
-
-void rl_fini() {
-    write_history("tmp/" APP ".history");  // save/create if not exists
-}
-
-int repl() {
-    rl_init();
-    char *input;
-    while ((input = readline(APP "> ")) != nullptr) {
-        std::string line(input);
-        std::clog << "input:" << line << '\n';
-        if (!line.empty()) { add_history(input); }
-        free(input);
-    }
-    rl_fini();
-    return 0;
-}
-
 void signal_handler(int sig) {  //
     fprintf(stderr, "\n\nsignal:%i ", sig);
     rl_fini();
@@ -46,9 +22,35 @@ void signal_handler(int sig) {  //
     }
 }
 
+void rl_init() {
+    std::signal(SIGINT, signal_handler);   // \ register dignals
+    std::signal(SIGTERM, signal_handler);  // /
+    printf("PID: %d\n", getpid());         // for debug: kill -SIGTERM <pid>
+    rl_readline_name = APP;
+    rl_bind_key('\t', rl_complete);       // filename completion (by default)
+    read_history("tmp/" APP ".history");  // load
+    stifle_history(10);                   // keep last N commands
+}
+
+void rl_fini() {
+    write_history("tmp/" APP ".history");  // save/create if not exists
+}
+
+int rl_repl() {
+    char *input;
+    while ((input = readline(APP "> ")) != nullptr) {
+        std::string line(input);
+        std::clog << "input:" << line << '\n';
+        if (!line.empty()) { add_history(input); }
+        free(input);
+    }  // stops on Ctrl+D (EOF)
+    rl_fini();
+    return 0;
+}
+
 int main(int argc, char *argv[]) {  //
     arg(0, argv[0]);
-    std::signal(SIGINT, signal_handler);
+    rl_init();
     std::cout << "\nrte:" << rte_eal_init(argc, argv) << '\n';
     for (int i = 1; i < argc; i++) {  //
         arg(i, argv[i]);
@@ -58,7 +60,7 @@ int main(int argc, char *argv[]) {  //
         fclose(yyin);
         yyfile = nullptr;
     }
-    return repl();
+    return rl_repl();
 }
 
 void arg(int argc, char *argv) {  //

@@ -25,3 +25,6 @@ https://doc.dpdk.org/guides-24.11/prog_guide/env_abstraction_layer.html
 - Memory management ([[libc/malloc|malloc]])
 	- [[rte_malloc]]
 - logging
+
+
+## [[multi-process socket]]

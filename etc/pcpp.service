@@ -1,0 +1,24 @@
+# sudo systemctl daemon-reload
+# sudo systemctl enable  pcpp@dev01
+# sudo systemctl disable pcpp@dev01
+# sudo systemctl start   pcpp@dev01
+# sudo systemctl stop    pcpp@dev01
+# sudo systemctl status  pcpp@dev01
+# sudo lib/pcpp/setup_dpdk.py status
+
+[Unit]
+Description = pcpp @ %I
+Wants = network-online.target
+After = network.target network-online.target
+
+[Service]
+Type             = oneshot
+RemainAfterExit  = yes
+WorkingDirectory = /home/%i/pcpp
+User             = %i
+Group            = %i
+ExecStart        = /bin/sh etc/pcpp.start
+ExecStop         = /bin/sh etc/pcpp.stop
+
+[Install]
+WantedBy = multi-user.target

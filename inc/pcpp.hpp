@@ -25,14 +25,28 @@ extern void arg(int argc, char *argv);
 
 #include <csignal>
 
-extern void signal_handler(int sig);
+/// @name readline
+/// @{
+extern void signal_handler(int sig);  ///< UNIX signals handler
+extern void rl_init();                ///< run at @ref main start
+extern void rl_fini();                ///< cleanup (hump history, etc)
+extern int rl_repl();                 ///< REPL loop
+/// @}
+
+/// @name lexer
+/// @{
 extern int yylex();
+extern int yylineno;
 extern char *yytext;
 extern char *yyfile;
 extern FILE *yyin;
+/// @}
+
+/// @name parser
+/// @{
 extern int yyparse();
 extern void yyerror(std::string msg);
-extern int yylineno;
+/// @}
 
 #include "pcpp.yacc.hpp"
 /// @}
