@@ -36,7 +36,16 @@
             "label"          : "make: run",
             "type"           : "shell",
             "command"        : "make run",
-            // "dependsOn"      : "CMake: build",
+            "dependsOn"      : "CMake: build",
+            "problemMatcher" : [],
+            "presentation"   : {"showReuseMessage": true, "focus": true, "reveal": "silent", "close": false},
+            "group"          : {"kind": "build", "isDefault": true}
+        },
+        {
+            "label"          : "make: valg",
+            "type"           : "shell",
+            "command"        : "make valg",
+            "dependsOn"      : "CMake: build",
             "problemMatcher" : [],
             "presentation"   : {"showReuseMessage": true, "focus": true, "reveal": "silent", "close": false},
             "group"          : {"kind": "build", "isDefault": true}

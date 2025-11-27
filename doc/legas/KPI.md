@@ -13,7 +13,7 @@
 ## order
 
 - create empty project (atom regex name)
+	- [[file structure]]
 - create own fork of public project
-- clone your own clone into `ref/`
-
-![[file structure]]
+	- clone your own clone into `ref/`
+- replicate `ref/project` file structure by `find+touch`
