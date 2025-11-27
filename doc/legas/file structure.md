@@ -14,6 +14,8 @@ ref/
 ## C++
 
 ```
+lib/
+	app.ini
 inc/
 	app.hpp
 src/
@@ -26,6 +28,9 @@ src/
 ## [[em/cross|cross]]
 
 ```
+lib/
+	component1/
+	component2/
 hw/
 cpu/
 arch/
