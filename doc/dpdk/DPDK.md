@@ -26,6 +26,7 @@ These environments are created through the use of [[meson]] files and configurat
 ## [[Linux/kernel|kernel]] [[bypass]]
 ## [[PcapPlusPlus]]
 
+## [[dpdk/hello]]
 ## [[EAL]]
 ## [[net/LPM|LPM]]
 ## [[IOVA]]
