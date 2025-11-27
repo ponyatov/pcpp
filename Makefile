@@ -1,6 +1,7 @@
 include mk/var.mk
 include mk/dir.mk
 include mk/tool.mk
+include mk/src.mk
 include mk/all.mk
 include mk/debug.mk
 include mk/doc.mk

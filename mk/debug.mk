@@ -4,6 +4,9 @@ PORT ?= 12345
 .PHONY: gdbs gdb
 gdbs: bin/$(BINFILE) $(S)
 	gdbserver $(IP):$(PORT) $^
+# 	@$^ ; while [ $$? -eq 1 ]; do gdbserver $(IP):$(PORT) $^ ; done
+# 	@$^ ; while [ true ]; do gdbserver $(IP):$(PORT) $^ ; done
+
 gdb: bin/$(BINFILE) $(S)
 	gdb -nx -x .gdbinit $^
 
