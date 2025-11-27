@@ -1,0 +1,5 @@
+git make curl fzf
+code meld doxygen
+g++ gdb cmake pkg-config clang-format
+flex bison ragel libreadline-dev
+tshark wireshark dpdk-dev
