@@ -5,8 +5,9 @@
 %option noyywrap yylineno
 
 %%
-
-.               { yyerror(yytext); }
+";"[^\n]*       {}                      // line comment
+[ \t\r\n]+      {}                      // drop spaces
+.               { yyerror(yytext); }    // any undetected char
 
 %%
 char* yyfile = nullptr;
