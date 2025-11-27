@@ -25,19 +25,24 @@ int repl() {
 }
 
 void signal_handler(int sig) {  //
-    std::cerr << "\n\nsignal:" << sig << '\n';
+    fprintf(stderr, "\n\nsignal:%i ", sig);
     rl_fini();
     switch (sig) {
         case SIGINT:  // Ctrl+C
-            yyerror("SIGINT (Ctrl+C)");
+            fprintf(stderr, "SIGINT (Ctrl+C)\n\n");
+            exit(0);
         case SIGTERM:
-            yyerror("SIGTERM");
+            fprintf(stderr, "SIGTERM\n\n");
+            exit(0);
         case SIGHUP:
-            yyerror("SIGHUP");
+            fprintf(stderr, "SIGHUP\n\n");
+            exit(-1);
         case SIGQUIT:
-            yyerror("SIGQUIT");
+            fprintf(stderr, "SIGQUIT\n\n");
+            exit(-1);
         default:
-            yyerror("bad signal");
+            fprintf(stderr, "bad signal\n\n");
+            exit(-1);
     }
 }
 
