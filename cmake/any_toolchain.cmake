@@ -17,7 +17,7 @@ set(CMAKE_RC_COMPILER  ${TOOLCHAIN_PREFIX}-windres)
 set   (APP ${CMAKE_PROJECT_NAME})
 string(TOUPPER ${APP} APP_)
 
-# include(cross)
+include(cross)
 
 add_compile_options(
     # -Wall -Wextra               # -Wpedantic
