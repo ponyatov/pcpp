@@ -1,3 +1,6 @@
 #include "app.hpp"
 
-float num(char *s) { return atof(s); }
+float num(char *s) {
+    // assert(!strchr(s, '_'));
+    return atof(s);
+}

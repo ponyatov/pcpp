@@ -1,3 +1,39 @@
 #include "app.hpp"
 
-int dec(char *s) { return atoi(s); }
+%%machine dec;
+%%write  data;
+
+static int   cs  = 0;        ///< current state
+static int   act = 0;        ///< ???
+static char* eof = nullptr;  ///< end of file marker
+static char* ts  = nullptr;  ///< token start
+static char* te  = nullptr;  ///< token end
+// static int   top = 0;     ///< stack top
+// static int stack[4];      ///< call stack
+
+static int  resn =    0;     ///< result number
+static bool sign = true;     ///< +sign flag
+
+static int dec(char* p, char* pe) {
+    eof = pe; resn = 0; sign = true;
+    %%write init;
+    %%write exec;
+    if (sign) return +resn; else return -resn;
+}
+
+int dec(char *s) { return dec(s,s+strlen(s)); }
+
+%%{
+    dec := |*
+        '_'   => {};
+        [0-9] => { resn = resn *10 + (ts[0] - '0' + 0x0); };
+        any   => { yyerror("dec:dec"); };
+    *|;
+
+    main := |*
+        '+'   => { sign =  true; fgoto dec; /* optional */ };
+        '-'   => { sign = false; fgoto dec; /* sign     */ };
+        [0-9] => { p--; fgoto dec; };
+        any   => { yyerror("dec:main"); };
+    *|;
+}%%
