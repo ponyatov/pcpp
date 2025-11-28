@@ -1,0 +1,44 @@
+#include "app.hpp"
+
+%%machine oct;
+%%write  data;
+
+static int   cs  = 0;        ///< current state
+static int   act = 0;        ///< ???
+static char* eof = nullptr;  ///< end of file marker
+static char* ts  = nullptr;  ///< token start
+static char* te  = nullptr;  ///< token end
+// static int   top = 0;        ///< stack top
+// static int stack[4];         ///< call stack
+
+static int  resn =    0;     ///< result number
+static bool sign = true;     ///< +sign flag
+
+static int oct(char* p, char* pe) {
+    eof = pe; resn = 0; sign = true;
+    %%write init;
+    %%write exec;
+    if (sign) return +resn; else return -resn;
+}
+
+int oct(char *s) { return oct(s,s+strlen(s)); }
+
+%%{
+    oct := |*
+        [_]   => {};
+        [0-7] => { resn = resn << 3 | (ts[0] - '0' + 0x0); };
+        any   => { yyerror("oct:oct"); };
+    *|;
+
+    pfx := |*
+        "0o"  => { fgoto oct; };
+        any   => { yyerror("oct:pfx"); };
+    *|;
+
+    main := |*
+        '+'   => { sign =  true; fgoto pfx; /* optional */ };
+        '-'   => { sign = false; fgoto pfx; /* sign     */ };
+        "0o"  => { fgoto oct; };
+        any   => { yyerror("oct:main"); };
+    *|;
+}%%

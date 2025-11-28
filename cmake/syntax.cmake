@@ -53,17 +53,15 @@ foreach(YACC_FILE ${Y})
     )
 endforeach()
 
-if(RAGEL_EXECUTABLE)
-    foreach(RAGEL_FILE ${R})
-        string(REGEX REPLACE ".+\/(.+)\.ragel$" "${CMAKE_BINARY_DIR}/\\1.ragel.cpp"
-            RAGEL_CPP           ${RAGEL_FILE})
-        list(APPEND CP          ${RAGEL_CPP})
-        add_custom_command(
-            OUTPUT              ${RAGEL_CPP}
-            DEPENDS             ${RAGEL_FILE}
-            WORKING_DIRECTORY   ${CMAKE_SOURCE_DIR}
-            COMMAND             ${RAGEL_EXECUTABLE}
-            ARGS                -C -G2 -o ${RAGEL_CPP} ${RAGEL_FILE}
-        )
-    endforeach()
-endif()
+foreach(RAGEL_FILE ${R})
+    string(REGEX REPLACE ".+\/(.+)\.ragel$" "${CMAKE_BINARY_DIR}/\\1.ragel.cpp"
+        RAGEL_CPP           ${RAGEL_FILE})
+    list(APPEND CP          ${RAGEL_CPP})
+    add_custom_command(
+        OUTPUT              ${RAGEL_CPP}
+        DEPENDS             ${RAGEL_FILE}
+        WORKING_DIRECTORY   ${CMAKE_SOURCE_DIR}
+        COMMAND             ragel
+        ARGS                -C -G2 -o ${RAGEL_CPP} ${RAGEL_FILE}
+    )
+endforeach()

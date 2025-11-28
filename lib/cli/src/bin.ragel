@@ -1,0 +1,44 @@
+#include "app.hpp"
+
+%%machine bin;
+%%write  data;
+
+static int   cs  = 0;        ///< current state
+static int   act = 0;        ///< ???
+static char* eof = nullptr;  ///< end of file marker
+static char* ts  = nullptr;  ///< token start
+static char* te  = nullptr;  ///< token end
+// static int   top = 0;     ///< stack top
+// static int stack[4];      ///< call stack
+
+static int  resn =    0;     ///< result number
+static bool sign = true;     ///< +sign flag
+
+static int bin(char* p, char* pe) {
+    eof = pe; resn = 0; sign = true;
+    %%write init;
+    %%write exec;
+    if (sign) return +resn; else return -resn;
+}
+
+int bin(char *s) { return bin(s,s+strlen(s)); }
+
+%%{
+    bin := |*
+        [_]   => {};
+        [01]  => { resn = resn << 1 | (ts[0] - '0' + 0x0); };
+        any   => { yyerror("bin:bin"); };
+    *|;
+
+    pfx := |*
+        "0b"  => { fgoto bin; };
+        any   => { yyerror("bin:pfx"); };
+    *|;
+
+    main := |*
+        '+'   => { sign =  true; fgoto pfx; /* optional */ };
+        '-'   => { sign = false; fgoto pfx; /* sign     */ };
+        "0b"  => { fgoto bin; };
+        any   => { yyerror("bin:main"); };
+    *|;
+}%%

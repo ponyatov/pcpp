@@ -15,7 +15,7 @@ extern FILE *yyin;                     ///< script file handler
 /// @name parser
 /// @{
 extern void parse(char *);             ///< parse string
-extern int yyparse();                  ///< parser
+extern int yyparse();                  ///< parser (`bison`)
 extern void yyerror(std::string msg);  ///< syntax error callback
 #include "cli.yacc.hpp"
 /// @}
