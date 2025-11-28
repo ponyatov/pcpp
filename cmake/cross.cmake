@@ -1,3 +1,5 @@
+message("-- | cross: ${HW} ${CPU} ${ARCH} ${OS}")
+
 include(  hw/${HW}/${HW}.cmake    )
 include( cpu/${CPU}/${CPU}.cmake  )
 include(arch/${ARCH}/${ARCH}.cmake)

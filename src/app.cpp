@@ -1,27 +1,5 @@
 #include "app.hpp"
 
-void signal_handler(int sig) {  //
-    fprintf(stderr, "\n\nsignal:%i ", sig);
-    rl_fini();
-    switch (sig) {
-        case SIGINT:  // Ctrl+C
-            fprintf(stderr, "SIGINT (Ctrl+C)\n\n");
-            exit(0);
-        case SIGTERM:
-            fprintf(stderr, "SIGTERM\n\n");
-            exit(0);
-        case SIGHUP:
-            fprintf(stderr, "SIGHUP\n\n");
-            exit(-1);
-        case SIGQUIT:
-            fprintf(stderr, "SIGQUIT\n\n");
-            exit(-1);
-        default:
-            fprintf(stderr, "bad signal\n\n");
-            exit(-1);
-    }
-}
-
 void rl_init() {
     std::signal(SIGINT, signal_handler);   // \ register dignals
     std::signal(SIGTERM, signal_handler);  // /
@@ -46,23 +24,4 @@ int rl_repl() {
     }  // stops on Ctrl+D (EOF)
     rl_fini();
     return 0;
-}
-
-int main(int argc, char *argv[]) {  //
-    arg(0, argv[0]);
-    rl_init();
-    std::cout << "\nrte:" << rte_eal_init(argc, argv) << '\n';
-    for (int i = 1; i < argc; i++) {  //
-        arg(i, argv[i]);
-        yyfile = argv[i];
-        assert(yyin = fopen(yyfile, "r"));
-        yyparse();
-        fclose(yyin);
-        yyfile = nullptr;
-    }
-    return rl_repl();
-}
-
-void arg(int argc, char *argv) {  //
-    std::clog << "arg[" << argc << "] = <" << argv << ">\n";
 }

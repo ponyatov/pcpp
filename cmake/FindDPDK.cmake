@@ -20,6 +20,7 @@ pkg_check_modules(DPDK REQUIRED libdpdk>=22.11)
 
 if(DPDK_FOUND)
   message("-- | DPDK: ${DPDK_VERSION}")
+  add_compile_definitions(DPDK_FOUND)
 
   add_library(DPDK::DPDK INTERFACE IMPORTED)
 

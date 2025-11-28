@@ -1,4 +1,4 @@
-# include(FindPackageHandleStandardArgs)
+include(FindPackageHandleStandardArgs)
 
 # ~~~
 # - Try to find READLINE include dirs and libraries
@@ -17,6 +17,7 @@ pkg_check_modules(READLINE REQUIRED readline>=8.2)
 
 if(READLINE_FOUND)
   message("-- | READLINE: ${READLINE_VERSION}")
+  add_compile_definitions(READLINE_FOUND)
 
   add_library(READLINE::READLINE INTERFACE IMPORTED)    
 
@@ -47,10 +48,10 @@ endif()
 #     list(APPEND LIBS ${READLINE_LIBRARY})
 # endif()
 
-# # if(READLINE_FOUND AND NOT TARGET READLINE::READLINE)
-# #     add_library(READLINE::READLINE SHARED IMPORTED)
-# #     set_target_properties(READLINE::READLINE PROPERTIES
-# #         IMPORTED_LOCATION "${READLINE_LIBRARY}"
-# #         INTERFACE_INCLUDE_DIRECTORIES "${READLINE_INCLUDE_DIR}"
-# #     )
-# # endif()
+# if(READLINE_FOUND AND NOT TARGET READLINE::READLINE)
+#     add_library(READLINE::READLINE SHARED IMPORTED)
+#     set_target_properties(READLINE::READLINE PROPERTIES
+#         IMPORTED_LOCATION "${READLINE_LIBRARY}"
+#         INTERFACE_INCLUDE_DIRECTORIES "${READLINE_INCLUDE_DIR}"
+#     )
+# endif()
