@@ -2,7 +2,7 @@
 
 void Watch::signal(int sig) {  //
     fprintf(stderr, "\n\nsignal:%i ", sig);
-    rl_fini();
+    RL::fini();
     switch (sig) {
         case SIGINT:  // Ctrl+C
             fprintf(stderr, "SIGINT (Ctrl+C)\n\n");

@@ -1,6 +1,7 @@
 #include "app.hpp"
 
-char* yyfile = nullptr;
+char *yyfile = nullptr;
+std::string yystr;
 
 void yyerror(std::string msg) {
     std::cerr << "\n\n"

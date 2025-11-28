@@ -1,21 +1,8 @@
 #include "app.hpp"
 
-__attribute__((weak)) int main(int argc, char *argv[]) {
-    arg(0, argv[0]);
-    rl_init();
-    Watch::init(argc, argv);
-    Net::init(argc, argv);
-    setup(argc, argv);
-    for (int i = 1; i < argc; i++) {
-        arg(i, argv[i]);
-        cli(argv[i]);
-    }
-    assert(background = new std::thread(loop));
-    return rl_repl();
-}
-
 __attribute__((weak)) void arg(int argc, char *argv) {  //
     std::clog << "arg[" << argc << "] = <" << argv << ">\n";
+    if (argc) cli(argv);
 }
 
 __attribute__((weak)) void setup(int argc, char *argv[]) {
@@ -32,7 +19,7 @@ __attribute__((weak)) void loop() {
         time_t now = time(NULL);
         struct tm *t = localtime(&now);
         sprintf(_prompt, "%02d:%02d:%02d %s[%i]> ", t->tm_hour, t->tm_min,
-                t->tm_sec, APP, rl_counter);
+                t->tm_sec, APP, RL::counter);
         rl_set_prompt(_prompt);
         rl_redisplay();
         std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -44,13 +31,4 @@ __attribute__((weak)) void restart(int ret) {
     stop = true;
     background->join();
     exit(ret);
-    // char pname[0x100];
-    // ssize_t plen = readlink("/proc/self/exe", pname, sizeof(pname) - 1);
-    // assert(plen != -1);
-    // pname[plen] = '\0';
-    // pid_t pid = fork();
-    // char *args[] = {pname, nullptr};
-    // if (pid == 0) {  // child
-    //     execv(pname, args);
-    // } else if (pid > 0) {  // parent
 }

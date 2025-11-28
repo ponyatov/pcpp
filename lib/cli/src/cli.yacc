@@ -19,6 +19,7 @@
 
 %%
 ini:| ini ex
+
 ex  : CHAR  { std::clog << "\tchar:" <<              $1  << " "; }
     | INT   { std::clog << "\t int:" <<              $1  << " "; }
     | HEX   { std::clog << "\t hex:" <<  std::hex << $1  << " "; }
@@ -27,3 +28,5 @@ ex  : CHAR  { std::clog << "\tchar:" <<              $1  << " "; }
     | NUM   { std::clog << "\t num:" <<              $1  << " "; }
     | STR   { std::clog << "\t str:" <<             *$1  << " "; }
     | ID    { std::clog << "\t  id:" <<             *$1  << " "; }
+
+%%

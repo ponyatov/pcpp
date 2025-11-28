@@ -5,11 +5,12 @@
 
 /// @name lexer
 /// @{
-extern int yylex();                    ///< lexer (`flex`)
-extern int yylineno;                   ///< line number
-extern char *yytext;                   ///< lexeme (token) string value
-extern char *yyfile;                   ///< current file name
-extern FILE *yyin;                     ///< script file handler
+extern int yylex();        ///< lexer (`flex`)
+extern int yylineno;       ///< line number
+extern char *yytext;       ///< lexeme (token) string value
+extern char *yyfile;       ///< current file name
+extern std::string yystr;  ///< buffer for block lexing (string, comment,..)
+extern FILE *yyin;         ///< script file handler
 /// @}
 
 /// @name parser
