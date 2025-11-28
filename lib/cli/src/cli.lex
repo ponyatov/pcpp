@@ -1,5 +1,7 @@
 %{
     #include "app.hpp"
+
+    static std::string buf;
 %}
 
 %option noyywrap yylineno
@@ -10,9 +12,19 @@ n  [0-9]
 alpha [_a-zA-Z]
 alnum [_a-zA-Z0-9]
 
+%x str
+
 %%
 "#!"[^\n]+              {}                              // shebang
 ";"[^\n]*               {}                              // line comment
+
+\'                      { BEGIN(str); buf = ""; }
+<str>\'                 { BEGIN(INITIAL);
+                          yylval.s = new std::string(buf); return t_STR; }
+<str>\\t                { buf += '\t';   }
+<str>\\r                { buf += '\r';   }
+<str>\\n                { buf += '\n';   }
+<str>.                  { buf += yytext; }
 
 {s}?{n}+[eE]{s}?{n}+    {yylval.f = num(yytext); return t_NUM;}   // float
 {s}?{n}+\.{n}+          {yylval.f = num(yytext); return t_NUM;}   // float

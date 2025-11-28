@@ -54,7 +54,8 @@ tmp/
 ref/             reference code from other apps & libs (incl. legacy)
 ```
 
-[[RTOS/bib]]
+[[IoT/IoT|IoT]]
+
 ## [[em/cross|cross]]
 
 ```
