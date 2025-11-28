@@ -12,4 +12,9 @@
 #endif
 /// @}
 
+class Net {
+   public:
+    static void init(int argc, char *argv[]);
+};
+
 /// @}

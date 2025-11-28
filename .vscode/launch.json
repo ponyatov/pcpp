@@ -31,7 +31,7 @@
             "stopAtEntry"     : true,
             "externalConsole" : false,
             "MIMode"          : "gdb",
-            // "miDebuggerPath"  : "${workspaceFolder}/bin/send",
+            "miDebuggerPath"  : "gdb",
             "setupCommands"   : [{"text": "-enable-pretty-printing","ignoreFailures": true}]
         }
     ]

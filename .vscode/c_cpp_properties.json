@@ -4,7 +4,8 @@
         "appInclude": [
             "${workspaceFolder}/inc/**",
             "${workspaceFolder}/tmp/**",
-            "${workspaceFolder}/src/**"
+            "${workspaceFolder}/src/**",
+            "${workspaceFolder}/lib/inc/**" ,"${workspaceFolder}/lib/*/inc/**"
         ]
         "crossInclude": [
             "${workspaceFolder}/hw/inc/**"  ,"${workspaceFolder}/hw/*/inc/**"  ,

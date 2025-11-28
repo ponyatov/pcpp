@@ -6,10 +6,7 @@
         "ref/**": true,
     },
     "files.associations": {
-        "cstdio": "cpp",
-        "deque": "cpp",
-        "string": "cpp",
-        "vector": "cpp"
+        "*.ini": "properties", "*.f": "properties"
     },
 
     // editor
