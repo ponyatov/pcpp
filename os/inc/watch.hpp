@@ -6,6 +6,12 @@
 
 /// @ingroup main
 /// @{
-extern void signal_handler(int sig);        ///< UNIX signals handler
-extern void watch(int argc, char *argv[]);  ///< start binary/script watchers
+class Watch {
+    static void signal(int sig);                ///< UNIX signals handler
+    static void file(char *filename);           //
+    static std::vector<std::thread *> threads;  //
+
+   public:                                     //
+    static void init(int argc, char *argv[]);  ///< start binary/script watchers
+};
 /// @}

@@ -1,30 +1,32 @@
 #include "app.hpp"
 
-void signal_handler(int sig) {  //
+void Watch::signal(int sig) {  //
     fprintf(stderr, "\n\nsignal:%i ", sig);
     rl_fini();
     switch (sig) {
         case SIGINT:  // Ctrl+C
             fprintf(stderr, "SIGINT (Ctrl+C)\n\n");
-            exit(0);
+            exit(sig);
         case SIGTERM:
             fprintf(stderr, "SIGTERM\n\n");
-            exit(0);
+            exit(sig);
         case SIGHUP:
             fprintf(stderr, "SIGHUP\n\n");
-            exit(-1);
+            stop = true;
+            background->join();
+            exit(sig);
         case SIGQUIT:
             fprintf(stderr, "SIGQUIT\n\n");
-            exit(-1);
+            exit(sig);
         default:
             fprintf(stderr, "bad signal\n\n");
-            exit(-1);
+            exit(sig);
     }
 }
 
-static void _watch(int argc, char *argv) {
+void Watch::file(char *filename) {
     int fd = inotify_init();
-    int wd = inotify_add_watch(fd, argv, IN_CLOSE_WRITE | IN_ATTRIB);
+    int wd = inotify_add_watch(fd, filename, IN_CLOSE_WRITE | IN_ATTRIB);
     char buf[1024];
     read(fd, buf, sizeof(buf));
     inotify_rm_watch(fd, wd);
@@ -33,9 +35,13 @@ static void _watch(int argc, char *argv) {
     exit(1);
 }
 
-static std::vector<std::thread *> _watch_t;
+std::vector<std::thread *> Watch::threads;
 
-void watch(int argc, char *argv[]) {
+void Watch::init(int argc, char *argv[]) {
+    printf("PID: %d\n", getpid());       // for debug: kill -SIGTERM <pid>
+    std::signal(SIGINT, Watch::signal);  // register signals
+    std::signal(SIGTERM, Watch::signal);
+    std::signal(SIGHUP, Watch::signal);
     for (int i = 0; i < argc; i++)
-        _watch_t.push_back(new std::thread(_watch, i, argv[i]));
+        threads.push_back(new std::thread(Watch::file, argv[i]));
 }

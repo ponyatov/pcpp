@@ -1,9 +1,6 @@
 #include "app.hpp"
 
 void rl_init() {
-    std::signal(SIGINT, signal_handler);   // \ register dignals
-    std::signal(SIGTERM, signal_handler);  // /
-    printf("PID: %d\n", getpid());         // for debug: kill -SIGTERM <pid>
     rl_readline_name = APP;
     rl_bind_key('\t', rl_complete);       // filename completion (by default)
     read_history("tmp/" APP ".history");  // load

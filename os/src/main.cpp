@@ -3,9 +3,8 @@
 __attribute__((weak)) int main(int argc, char *argv[]) {
     arg(0, argv[0]);
     rl_init();
-#ifdef DPDK_FOUND
-    std::cout << "\nrte:" << rte_eal_init(argc, argv) << '\n';
-#endif
+    Watch::init(argc, argv);
+    Net::init(argc, argv);
     setup(argc, argv);
     for (int i = 1; i < argc; i++) {
         arg(i, argv[i]);
