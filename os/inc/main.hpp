@@ -7,5 +7,5 @@ extern void setup(int argc, char *argv[]);  ///< generic setup
 extern void loop();                         ///< event loop
 extern std::thread *background;             ///< thread for @ref loop
 extern bool stop;                           ///< @ref loop stop flag
-
+extern void restart(int ret = 0);           ///< program self-restart
 /// @}

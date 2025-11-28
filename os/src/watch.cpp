@@ -12,9 +12,7 @@ void Watch::signal(int sig) {  //
             exit(sig);
         case SIGHUP:
             fprintf(stderr, "SIGHUP\n\n");
-            stop = true;
-            background->join();
-            exit(sig);
+            restart(sig);
         case SIGQUIT:
             fprintf(stderr, "SIGQUIT\n\n");
             exit(sig);
