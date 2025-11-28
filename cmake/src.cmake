@@ -47,5 +47,12 @@ file(GLOB INC
     RELATIVE ${CMAKE_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}
     inc src
+    # cross
+      hw/inc   hw/${HW}/inc
+     cpu/inc  cpu/${CPU}/inc
+    arch/inc arch/${ARCH}/inc
+      os/inc   os/${OS}/inc
+    # lib
+    lib/inc lib/*/inc
 )
 include_directories(${INC})

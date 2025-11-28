@@ -7,7 +7,7 @@ __attribute__((weak)) int main(int argc, char *argv[]) {
     std::cout << "\nrte:" << rte_eal_init(argc, argv) << '\n';
 #endif
     setup(argc, argv);
-    for (int i = 1; i < argc; i++) {  //
+    for (int i = 1; i < argc; i++) {
         arg(i, argv[i]);
         yyfile = argv[i];
         assert(yyin = fopen(yyfile, "r"));
@@ -31,9 +31,9 @@ __attribute__((weak)) void setup(int argc, char *argv[]) {
 bool stop = false;
 std::thread *background;
 __attribute__((weak)) void loop() {
-    std::clog << "\nloop: started\n";
+    std::clog << "\nloop: started";
     while (!stop) {
-        std::clog << "\n\tloop event\n";
+        std::clog << "\nloop: event";
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     exit(0);

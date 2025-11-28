@@ -1,6 +1,7 @@
 #pragma once
-/// @defgroup repl repl
-/// @brief REPL: command line interface
+/// @defgroup cli cli
+/// @ingroup lib
+/// @brief CLI: command line interface (REPL)
 /// @{
 
 #include <readline/history.h>

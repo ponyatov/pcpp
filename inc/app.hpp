@@ -1,8 +1,9 @@
 #pragma once
+#include "cli.hpp"
 #include "libc.hpp"
 #include "main.hpp"
 #include "net.hpp"
-#include "repl.hpp"
+#include "os.hpp"
 #include "syntax.hpp"
 #include "watch.hpp"
 
