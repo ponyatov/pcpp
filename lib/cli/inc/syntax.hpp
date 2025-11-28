@@ -5,11 +5,11 @@
 
 /// @name lexer
 /// @{
-extern int yylex();                    ///< lexer
+extern int yylex();                    ///< lexer (`flex`)
 extern int yylineno;                   ///< line number
 extern char *yytext;                   ///< lexeme (token) string value
 extern char *yyfile;                   ///< current file name
-extern FILE *yyin;                     ///< file handler
+extern FILE *yyin;                     ///< script file handler
 /// @}
 
 /// @name parser
@@ -17,5 +17,5 @@ extern FILE *yyin;                     ///< file handler
 extern void parse(char *);             ///< parse string
 extern int yyparse();                  ///< parser
 extern void yyerror(std::string msg);  ///< syntax error callback
-#include "repl.yacc.hpp"
+#include "cli.yacc.hpp"
 /// @}

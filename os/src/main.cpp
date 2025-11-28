@@ -9,11 +9,7 @@ __attribute__((weak)) int main(int argc, char *argv[]) {
     setup(argc, argv);
     for (int i = 1; i < argc; i++) {
         arg(i, argv[i]);
-        yyfile = argv[i];
-        assert(yyin = fopen(yyfile, "r"));
-        yyparse();
-        fclose(yyin);
-        yyfile = nullptr;
+        cli(argv[i]);
     }
     assert(background = new std::thread(loop));
     return rl_repl();
@@ -31,9 +27,12 @@ __attribute__((weak)) void setup(int argc, char *argv[]) {
 bool stop = false;
 std::thread *background;
 __attribute__((weak)) void loop() {
-    std::clog << "\nloop: started";
+    std::clog << "\nloop: started\n";
+    uint n = 0;
     while (!stop) {
-        std::clog << "\nloop: event";
+        n++;
+        sprintf(rl_prompt, "%.5i>", n);
+        rl_set_prompt(rl_prompt);
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     exit(0);
