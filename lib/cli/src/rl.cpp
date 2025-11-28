@@ -15,12 +15,15 @@ void rl_fini() {
     write_history("tmp/" APP ".history");  // save/create if not exists
 }
 
+int rl_counter = 0;
+
 int rl_repl() {
     char* input;
-    while ((input = readline(APP ">")) != nullptr) {
+    while ((input = readline(APP "> ")) != nullptr) {
         std::string line(input);
         std::clog << "input:" << line << '\n';
         if (!line.empty()) {  //
+            rl_counter++;
             add_history(input);
         }
         free(input);

@@ -28,11 +28,14 @@ bool stop = false;
 std::thread *background;
 __attribute__((weak)) void loop() {
     std::clog << "\nloop: started\n";
-    uint n = 0;
+    char _prompt[0x10];
     while (!stop) {
-        n++;
-        sprintf(rl_prompt, "%.5i>", n);
-        rl_set_prompt(rl_prompt);
+        time_t now = time(NULL);
+        struct tm *t = localtime(&now);
+        sprintf(_prompt, "%02d:%02d:%02d %s[%i]> ", t->tm_hour, t->tm_min,
+                t->tm_sec, APP, rl_counter);
+        rl_set_prompt(_prompt);
+        rl_redisplay();
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     exit(0);
