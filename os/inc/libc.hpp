@@ -1,7 +1,6 @@
 #pragma once
 /// @defgroup libc libc
 /// @{
-#include <bitset>
 #include <cassert>
 #include <csignal>
 #include <cstdio>
