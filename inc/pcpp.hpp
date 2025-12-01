@@ -1,6 +1,7 @@
 #pragma once
 
-#define MBUF_POOL_SZ (8192-1)
+#define MBUF_POOL_SZ (8192 - 1)
+// #define MBUF_POOL_SZ (0x10000 - 1)
 
 #include <DpdkDevice.h>
 #include <DpdkDeviceList.h>
