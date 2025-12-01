@@ -18,10 +18,6 @@ set   (APP ${CMAKE_PROJECT_NAME})
 string(TOUPPER ${APP} APP_)
 
 # include(cross)
-string(TOUPPER ${HW}   HW_  )
-string(TOUPPER ${CPU}  CPU_ )
-string(TOUPPER ${ARCH} ARCH_)
-string(TOUPPER ${OS}   OS_  )
 
 add_compile_options(
     # -Wall -Wextra               # -Wpedantic

@@ -1,0 +1,28 @@
+{
+    "groups": [
+        {
+            "name": "g1d",
+            "duration": 60,
+            "loop": false,
+            "freq": 1,
+            "packetSize": 1800,
+            "sensors": [
+                {
+                    "name": "S_1_1",
+                    "src": "10.120.100.111:40001",
+                    "dst": "10.120.101.11:40001",
+                    "sn": "2531001",
+                    "dataPath": "temp/PLT4600_gen_1/S_1_1.gen"
+                },
+                {
+                    "name": "S_1_2",
+                    "src": "10.120.100.111:40002",
+                    "dst": "10.120.101.11:40002",
+                    "sn": "2531002",
+                    "dataPath": "temp/PLT4600_gen_1/S_1_2.gen"
+                }
+            ]
+        }
+    ],
+    "baseCPUIndex": 0
+}
