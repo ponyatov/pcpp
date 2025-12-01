@@ -1,13 +1,13 @@
 # sudo systemctl daemon-reload
-# sudo systemctl enable  send@dev01
-# sudo systemctl disable send@dev01
-# sudo systemctl start   send@dev01
-# sudo systemctl stop    send@dev01
-# sudo systemctl status  send@dev01
+# sudo systemctl enable  pcpp@dev01
+# sudo systemctl disable pcpp@dev01
+# sudo systemctl start   pcpp@dev01
+# sudo systemctl stop    pcpp@dev01
+# sudo systemctl status  pcpp@dev01
 # sudo lib/pcpp/setup_dpdk.py status
 
 [Unit]
-Description = send @ %I
+Description = pcpp @ %I
 Wants = network-online.target
 After = network.target network-online.target
 
@@ -17,8 +17,8 @@ RemainAfterExit  = yes
 WorkingDirectory = /home/%i/pcapp_based
 User             = root
 Group            = root
-ExecStart        = /bin/sh etc/send.start
-ExecStop         = /bin/sh etc/send.stop
+ExecStart        = /bin/sh etc/pcpp.start
+ExecStop         = /bin/sh etc/pcpp.stop
 
 [Install]
 WantedBy = multi-user.target

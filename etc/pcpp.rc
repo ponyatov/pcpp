@@ -1,0 +1,19 @@
+#!/bin/sh
+export ETH=enp1s0np1
+export PCI=0000:01:00.0
+export DRIVER=vfio-pci
+# export SIP=10.120.101.111/24
+
+export DPDKPY=lib/pcpp/setup_dpdk.py
+export DPDK_ROOT=/usr/local
+export HUGESIZE=8192
+
+echo 1 | sudo tee /sys/module/vfio/parameters/enable_unsafe_noiommu_mode
+# cat /sys/module/vfio/parameters/enable_unsafe_noiommu_mode
+
+echo $HUGESIZE | sudo tee /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+# cat /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
+# cat /proc/meminfo | grep Huge
+
+sudo $DPDKPY setup -r $DPDK_ROOT -g $HUGESIZE -i $ETH -m $DRIVER
+# $DPDKPY status
