@@ -13,6 +13,7 @@ project(
 
 include(version)  # binary files naming by version & git branch/hash
 include(src)      # scan project for source code files
+include(net)      # raw packets networking
 
 message("-- |")
 message("-- | toolchain: " ${CMAKE_CXX_COMPILER} " @ " ${CMAKE_TOOLCHAIN_FILE})
@@ -27,6 +28,9 @@ message("-- | PCAP: ${PCAP_VERSION}")
 endif()
 if(DPDK_FOUND)
 message("-- | DPDK: ${DPDK_VERSION}")
+endif()
+if(PCPP_FOUND)
+message("-- | PCPP: ${PCPP_VERSION}")
 endif()
 
 add_executable(${CMAKE_PROJECT_NAME}
