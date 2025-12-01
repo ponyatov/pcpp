@@ -35,7 +35,8 @@ void Dev::init(int argc, char* argv[]) {  //
               << "\n";
     assert(dev->openMultiQueues(1, 1));
     Dev::workers.push_back(new Stat(dev));
-    pcpp::DpdkDeviceList::getInstance().startDpdkWorkerThreads(0b10,
+    Dev::workers.push_back(new Send(dev));
+    pcpp::DpdkDeviceList::getInstance().startDpdkWorkerThreads(0b110,
                                                                Dev::workers);
 }
 
@@ -55,24 +56,46 @@ void Dev::onApplicationInterrupted(void*) {  //
 
 std::vector<pcpp::DpdkWorkerThread*> Dev::workers;
 
+bool Send::run(uint32_t coreId) {  //
+    _coreId = coreId;
+    pcpp::EthLayer eth_layer(sendMac, recvMac, PCPP_ETHERTYPE_IP);
+    packet.addLayer(&eth_layer);
+    packet.computeCalculateFields();
+    pcpp::MBufRawPacket* mbufArr[64] = {};
+    for (int i = 0; i < 64; i++) {  //
+        auto raw = packet.getRawPacket();
+        auto mbuf = new pcpp::MBufRawPacket();
+        mbuf->initFromRawPacket(raw, dev);
+        mbufArr[i] = mbuf;
+    }
+    while (!_stop) {  //
+        // dev->sendPacket(packet);
+        dev->sendPackets(mbufArr, 64, 0);
+        // std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+    }
+    return true;
+}
+
+#define M (1024. * 1024.)
+
 bool Stat::run(uint32_t coreId) {  //
     _coreId = coreId;
     for (uint n = 0; !_stop; n++) {
         dev->getStatistics(stats);
 
-        std::clog << "stat:" << n                                      //
-                  << " core:" << getCoreId()                           //
-                  << " mac:" << dev->getMacAddress()                   //
-                  << " mbuf:" << dev->getAmountOfMbufsInUse()          //
-                  << '/' << dev->getAmountOfFreeMbufs()                //
-                  << " packets:" << stats.aggregatedRxStats.packets    //
-                  << '/' << stats.aggregatedTxStats.packets            //
-                  << " pps:" << stats.aggregatedRxStats.packetsPerSec  //
-                  << '/' << stats.aggregatedTxStats.packetsPerSec      //
-                  << " bytes:" << stats.aggregatedRxStats.bytes        //
-                  << '/' << stats.aggregatedTxStats.bytes              //
-                  << " bps:" << stats.aggregatedRxStats.bytesPerSec    //
-                  << '/' << stats.aggregatedTxStats.bytesPerSec        //
+        std::clog << "stat:" << n                                         //
+                  << " core:" << getCoreId()                              //
+                  << " mac:" << dev->getMacAddress()                      //
+                  << " mbuf:" << dev->getAmountOfMbufsInUse()             //
+                  << '/' << dev->getAmountOfFreeMbufs()                   //
+                  << " packets:" << stats.aggregatedRxStats.packets       //
+                  << '/' << stats.aggregatedTxStats.packets               //
+                  << " pps:" << stats.aggregatedRxStats.packetsPerSec     //
+                  << '/' << stats.aggregatedTxStats.packetsPerSec         //
+                  << " mbytes:" << stats.aggregatedRxStats.bytes / M      //
+                  << '/' << stats.aggregatedTxStats.bytes / M             //
+                  << " mbps:" << stats.aggregatedRxStats.bytesPerSec / M  //
+                  << '/' << stats.aggregatedTxStats.bytesPerSec / M       //
                   << "\n";
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }

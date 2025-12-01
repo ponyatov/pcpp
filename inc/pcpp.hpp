@@ -4,8 +4,14 @@
 // #define MBUF_POOL_SZ (0x10000 - 1)
 #define MBUF_POOL_SIZE (16 * 1024 - 1)
 
+#define sendMac pcpp::MacAddress("e8:eb:d3:93:42:99")
+#define recvMac pcpp::MacAddress("e8:eb:d3:93:42:91")
+// "00:11:22:33:44:55")
+
 #include <DpdkDevice.h>
 #include <DpdkDeviceList.h>
+#include <EthLayer.h>
+#include <MacAddress.h>
 #include <SystemUtils.h>
 
 #include <cassert>
@@ -27,25 +33,30 @@ class Dev {
     static void onApplicationInterrupted(void*);
 };
 
-class Send : public pcpp::DpdkWorkerThread {
+class Worker : public pcpp::DpdkWorkerThread {
+   protected:
     pcpp::DpdkDevice* dev;
-    bool stop;
+    uint32_t _coreId;
+    bool _stop;
 
+   public:
+    Worker(pcpp::DpdkDevice* dev) : dev(dev) { _stop = false; }
+    void stop() { _stop = true; }
+    uint32_t getCoreId() const { return dev->getCurrentCoreId(); }
+};
+
+class Send : public Worker {
     pcpp::Packet packet;
 
    public:
-    Send(pcpp::DpdkDevice* dev) : dev(dev) {}
+    Send(pcpp::DpdkDevice* dev) : Worker(dev) {}
+    bool run(uint32_t coreId);
 };
 
-class Stat : public pcpp::DpdkWorkerThread {
-    pcpp::DpdkDevice* dev;
-    bool _stop;
-    uint32_t _coreId;
+class Stat : public Worker {
     pcpp::DpdkDevice::DpdkDeviceStats stats;
 
    public:
-    Stat(pcpp::DpdkDevice* dev) : dev(dev) { _stop = false; }
-    void stop() { _stop = true; }
-    uint32_t getCoreId() const { return dev->getCurrentCoreId(); }
+    Stat(pcpp::DpdkDevice* dev) : Worker(dev) {}
     bool run(uint32_t coreId);
 };
