@@ -6,6 +6,9 @@ extern int main(int argc, char* argv[]) {  //
         arg(i, argv[i]);
     }
     Dev::init(argc, argv);
+    while (!Dev::_stop)  //
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     return 0;
 }
 
@@ -20,13 +23,13 @@ void Dev::init(int argc, char* argv[]) {  //
     Dev::on_close();
     assert(pcpp::DpdkDeviceList::initDpdk(coreMaskToUse, MBUF_POOL_SIZE));
     assert(dev = pcpp::DpdkDeviceList::getInstance().getDeviceByPort(0));
-    std::clog << "Dev: " << dev->getDeviceName()           //
+    std::clog << "dev: " << dev->getDeviceName()           //
               << " id:" << dev->getDeviceId()              //
-              << " name:" << dev->getPMDName()             //
-              << " tx:" << dev->getTotalNumOfTxQueues()    //
-              << " rx:" << dev->getTotalNumOfRxQueues()    //
               << " mac:" << dev->getMacAddress()           //
               << " pci:" << dev->getPciAddress()           //
+              << " pmd:" << dev->getPMDName()              //
+              << " tx:" << dev->getTotalNumOfTxQueues()    //
+              << " rx:" << dev->getTotalNumOfRxQueues()    //
               << " mbuf:" << dev->getAmountOfMbufsInUse()  //
               << '/' << dev->getAmountOfFreeMbufs()        //
               << "\n";
@@ -41,11 +44,13 @@ void Dev::on_close() {
         Dev::onApplicationInterrupted, NULL);
 }
 
+bool Dev::_stop = false;
+
 void Dev::onApplicationInterrupted(void*) {  //
     pcpp::DpdkDeviceList::getInstance().stopDpdkWorkerThreads();
     dev->close();
-    fprintf(stderr, "\nShutting down...\n");
-    // std::clog << "interrupted:" << dev->getDeviceName() << "\n";
+    std::clog << "\ninterrupted:" << dev->getDeviceName() << "\n";
+    _stop = true;
 }
 
 std::vector<pcpp::DpdkWorkerThread*> Dev::workers;

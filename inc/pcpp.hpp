@@ -22,6 +22,7 @@ class Dev {
    public:
     static void init(int argc, char* argv[]);
     static std::vector<pcpp::DpdkWorkerThread*> workers;
+    static bool _stop;
     static void on_close();
     static void onApplicationInterrupted(void*);
 };
@@ -31,7 +32,6 @@ class Send : public pcpp::DpdkWorkerThread {
     bool stop;
 
     pcpp::Packet packet;
-    uint count;
 
    public:
     Send(pcpp::DpdkDevice* dev) : dev(dev) {}
