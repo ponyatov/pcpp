@@ -12,6 +12,7 @@ project(
 )
 
 include(version)  # binary files naming by version & git branch/hash
+include(src)      # scan project for source code files
 
 message("-- |")
 message("-- | toolchain: " ${CMAKE_CXX_COMPILER} " @ " ${CMAKE_TOOLCHAIN_FILE})
