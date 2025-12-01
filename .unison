@@ -1,0 +1,22 @@
+# .unicon
+## cd ~/.unison ; ln -fs ~/pcpp/.unison pcpp.prf ; cd ~/pcpp ; ls -la ~/.unison
+
+# Название профиля (опционально)
+label = pcpp sync
+
+# Корневые директории
+root = /home/dponyatov/pcpp
+root = ssh://dev01@10.120.100.39//home/dev01/pcpp
+
+# Автоматизация
+auto   = true
+batch  = true
+prefer = newer
+
+# Игнорирование специфичных файлов и кэшей
+# ignore = Name {.unison}
+ignore = Name {.git}
+ignore = Name {*~,*.log,*.sw?}
+ignore = Name {bin,doc/html,tmp,ref}
+ignore = Name {node_modules,.cache}
+ignore = Name {*.pyc,__pycache__}
