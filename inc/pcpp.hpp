@@ -13,6 +13,7 @@
 #include <EthLayer.h>
 #include <MacAddress.h>
 #include <SystemUtils.h>
+#include <sys/inotify.h>
 
 #include <cassert>
 #include <iostream>
@@ -20,6 +21,14 @@
 
 extern int main(int argc, char* argv[]);
 extern void arg(int argc, char* argv);
+
+class Watch {
+    static std::vector<std::thread*> thread;
+    static void watch(char* argv);
+
+   public:
+    static void init(int argc, char* argv[]);
+};
 
 class Dev {
     static pcpp::CoreMask coreMaskToUse;
@@ -29,7 +38,7 @@ class Dev {
     static void init(int argc, char* argv[]);
     static std::vector<pcpp::DpdkWorkerThread*> workers;
     static bool _stop;
-    static void on_close();
+    static void stop();
     static void onApplicationInterrupted(void*);
 };
 

@@ -2,6 +2,7 @@
 
 extern int main(int argc, char* argv[]) {  //
     arg(0, argv[0]);
+    Watch::init(argc, argv);
     for (int i = 1; i < argc; i++) {  //
         arg(i, argv[i]);
     }
@@ -12,15 +13,33 @@ extern int main(int argc, char* argv[]) {  //
     return 0;
 }
 
-extern void arg(int argc, char* argv) {  //
+void arg(int argc, char* argv) {  //
     std::clog << "arg[" << argc << "] = <" << argv << "]\n";
+}
+
+void Watch::watch(char* argv) {  //
+    int fd = inotify_init();
+    int wd = inotify_add_watch(fd, argv, IN_CLOSE_WRITE | IN_ATTRIB);
+    char buf[1024];
+    read(fd, buf, sizeof(buf));
+    inotify_rm_watch(fd, wd);
+    Dev::stop();
+    exit(1);
+}
+
+std::vector<std::thread*> Watch::thread;
+
+void Watch::init(int argc, char* argv[]) {  //
+    for (int i = 0; i < argc; i++) {        //
+        thread.push_back(new std::thread(Watch::watch, argv[i]));
+    }
 }
 
 pcpp::DpdkDevice* Dev::dev = nullptr;
 pcpp::CoreMask Dev::coreMaskToUse = pcpp::getCoreMaskForAllMachineCores();
 
 void Dev::init(int argc, char* argv[]) {  //
-    Dev::on_close();
+    Dev::stop();
     assert(pcpp::DpdkDeviceList::initDpdk(coreMaskToUse, MBUF_POOL_SIZE));
     assert(dev = pcpp::DpdkDeviceList::getInstance().getDeviceByPort(0));
     std::clog << "dev: " << dev->getDeviceName()           //
@@ -40,7 +59,7 @@ void Dev::init(int argc, char* argv[]) {  //
                                                                Dev::workers);
 }
 
-void Dev::on_close() {
+void Dev::stop() {
     pcpp::ApplicationEventHandler::getInstance().onApplicationInterrupted(
         Dev::onApplicationInterrupted, NULL);
 }
