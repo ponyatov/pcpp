@@ -4,6 +4,7 @@
 #include <DpdkDeviceList.h>
 #include <EthLayer.h>
 #include <MacAddress.h>
+#include <PayloadLayer.h>
 #include <SystemUtils.h>
 
 #define sendMac pcpp::MacAddress("e8:eb:d3:93:42:99")

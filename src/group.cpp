@@ -8,8 +8,9 @@ bool Group::run(uint32_t coreId) {  //
     packet = new pcpp::Packet();
     eth_layer = new pcpp::EthLayer(sendMac, recvMac, PCPP_ETHERTYPE_IP);
     packet->addLayer(eth_layer);
+    sends = 0;
     while (!_stop) {
-        std::clog << "group:" << g->name << "\n";
+        std::clog << "group:" << g->name << " sends:" << ++sends << "\n";
         // frame = 0;
 
         // sensors loop
@@ -26,17 +27,24 @@ bool Group::run(uint32_t coreId) {  //
 
             // fragmentation loop
             uint fragment_size = Dev::MTU;
-            for (uint offset = 0; offset < s->packetSize;) {
+            for (uint offset = 0; offset < s->packetSize; offset += Dev::MTU) {
                 // compute frame payload size
-                if (offset + Dev::MTU <= s->packetSize)
-                    fragment_size = Dev::MTU;
-                else
+                if (offset + Dev::MTU > s->packetSize)
                     fragment_size = s->packetSize % Dev::MTU;
                 // copy sensor data to
                 memcpy(frame.data, &s->start[offset], fragment_size);
-                offset += fragment_size;
-                std::clog << "\t\tframe:" << offset  //
-                          << '/' << fragment_size << "\n";
+                std::clog << "\t\tframe:" << offset << '/' << fragment_size;
+                // first frame
+                if (!offset) {
+                    frame.length = htobe16(s->packetSize + 8);  // with UDP
+                    payload = new pcpp::PayloadLayer(           //
+                        (uint8_t*)&frame, fragment_size + 8);   //
+                } else {                                        // 1+ frame
+                    payload = new pcpp::PayloadLayer(           //
+                        frame.data, fragment_size);
+                }
+                //
+                std::clog << "\n";
                 //
                 packet->computeCalculateFields();
             }

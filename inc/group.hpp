@@ -3,13 +3,16 @@
 #include "net.hpp"
 
 class Group : public Worker {
-    pcpp::DpdkDevice::DpdkDeviceStats stats;     ///<
-    GROUP* g;                                    ///<
-    pcpp::Packet* packet;                        ///<
-    static const uint mbufArr_size = 0x100;      ///<
-    pcpp::MBufRawPacket* mbufArr[mbufArr_size];  ///<
-    pcpp::EthLayer* eth_layer;                   ///<
-    pcpp::IPv4Layer* ipv4_layer;                 ///<
+    pcpp::DpdkDevice::DpdkDeviceStats stats;
+    GROUP* g;
+    pcpp::Packet* packet;
+    static const uint mbufArr_size = 0x100;
+    pcpp::MBufRawPacket* mbufArr[mbufArr_size];
+    pcpp::EthLayer* eth_layer;
+    pcpp::IPv4Layer* ipv4_layer;
+    pcpp::PayloadLayer* payload;
+
+    uint sends;///< sends counter
 
     // uint frame;  ///< current frame counter
     /// packet frame buffer with optional UDP header
