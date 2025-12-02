@@ -5,7 +5,7 @@
             "duration": 60,
             "loop": false,
             "freq": 1,
-            "packetSize": 1800,
+            "packetSize": 1523,
             "sensors": [
                 {
                     "name": "S_1_1",

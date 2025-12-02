@@ -13,10 +13,10 @@
 class Dev {
     static pcpp::CoreMask coreMaskToUse;
     static pcpp::DpdkDevice* dev;
-    static const uint MTU = 1400;
     static const uint MBufPoolSize = (16 * 1024 - 1);
 
    public:
+    static const uint MTU = 1400;
     static void init(int argc, char* argv[]);
     static std::vector<pcpp::DpdkWorkerThread*> workers;
     static bool _stop;
