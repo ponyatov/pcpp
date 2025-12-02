@@ -19,6 +19,8 @@
 #include <iostream>
 #include <thread>
 
+#include "types.hpp"
+
 extern int main(int argc, char* argv[]);
 extern void arg(int argc, char* argv);
 
@@ -67,5 +69,14 @@ class Stat : public Worker {
 
    public:
     Stat(pcpp::DpdkDevice* dev) : Worker(dev) {}
+    bool run(uint32_t coreId);
+};
+
+class Group : public Worker {
+    pcpp::DpdkDevice::DpdkDeviceStats stats;
+    GROUP *g;
+
+   public:
+    Group(pcpp::DpdkDevice* dev, GROUP* g): Worker(dev),g(g) {}
     bool run(uint32_t coreId);
 };

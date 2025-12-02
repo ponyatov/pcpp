@@ -6,10 +6,10 @@ extern int main(int argc, char* argv[]) {  //
     for (int i = 1; i < argc; i++) {  //
         arg(i, argv[i]);
     }
+    // return 0;
     Dev::init(argc, argv);
     while (!Dev::_stop)  //
         std::this_thread::sleep_for(std::chrono::seconds(1));
-    std::this_thread::sleep_for(std::chrono::seconds(1));
     return 0;
 }
 
@@ -53,9 +53,14 @@ void Dev::init(int argc, char* argv[]) {  //
               << '/' << dev->getAmountOfFreeMbufs()        //
               << "\n";
     assert(dev->openMultiQueues(1, 1));
+    uint32_t coreMask = 0;
     Dev::workers.push_back(new Stat(dev));
-    Dev::workers.push_back(new Send(dev));
-    pcpp::DpdkDeviceList::getInstance().startDpdkWorkerThreads(0b110,
+    coreMask = (coreMask << 1) | 0b10;
+    for (auto g : config.groups) {
+        Dev::workers.push_back(new Group(dev, g));
+        coreMask = (coreMask << 1) | 0b10;
+    }
+    pcpp::DpdkDeviceList::getInstance().startDpdkWorkerThreads(coreMask,
                                                                Dev::workers);
 }
 
@@ -116,7 +121,7 @@ bool Stat::run(uint32_t coreId) {  //
                   << " mbps:" << stats.aggregatedRxStats.bytesPerSec / M  //
                   << '/' << stats.aggregatedTxStats.bytesPerSec / M       //
                   << "\n";
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::seconds(11));
     }
     return true;
 }
