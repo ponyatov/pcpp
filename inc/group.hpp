@@ -1,6 +1,6 @@
 #pragma once
 
-#include "net.hpp"
+#include "dev.hpp"
 
 class Group : public Worker {
     pcpp::DpdkDevice::DpdkDeviceStats stats;
@@ -14,7 +14,9 @@ class Group : public Worker {
 
     /// @name fragmentation
     /// @{
-    uint16_t ipId;  ///< transaction id
+    uint16_t ipId;       ///< transaction id
+    uint fragment_size;  ///< current fragment size
+
     /// @}
 
     uint sends;  ///< sends counter

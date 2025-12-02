@@ -21,7 +21,7 @@ bool Stat::run(uint32_t coreId) {  //
                   << " mbps:" << stats.aggregatedRxStats.bytesPerSec / M  //
                   << '/' << stats.aggregatedTxStats.bytesPerSec / M       //
                   << "\n";
-        std::this_thread::sleep_for(std::chrono::seconds(11));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     return true;
 }

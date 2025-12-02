@@ -10,7 +10,7 @@
 extern int main(int argc, char* argv[]);
 extern void arg(int argc, char* argv);
 
+#include "dev.hpp"
 #include "group.hpp"
-#include "net.hpp"
 #include "stat.hpp"
 #include "watch.hpp"
