@@ -33,6 +33,8 @@ if(PCPP_FOUND)
 message("-- | PCPP: ${PCPP_VERSION}")
 endif()
 
+include(json2cpp)
+
 add_executable(${CMAKE_PROJECT_NAME}
     ${C}  ${H}          # C/C++ source
     ${S}  ${LD}         # embedded/lowlevel
