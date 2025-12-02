@@ -12,7 +12,12 @@ class Group : public Worker {
     pcpp::IPv4Layer* ipv4_layer;
     pcpp::PayloadLayer* payload;
 
-    uint sends;///< sends counter
+    /// @name fragmentation
+    /// @{
+    uint16_t ipId;  ///< transaction id
+    /// @}
+
+    uint sends;  ///< sends counter
 
     // uint frame;  ///< current frame counter
     /// packet frame buffer with optional UDP header

@@ -27,6 +27,7 @@ bool Group::run(uint32_t coreId) {  //
 
             // fragmentation loop
             uint fragment_size = Dev::MTU;
+            ipId++;
             for (uint offset = 0; offset < s->packetSize; offset += Dev::MTU) {
                 // compute frame payload size
                 if (offset + Dev::MTU > s->packetSize)
@@ -34,40 +35,42 @@ bool Group::run(uint32_t coreId) {  //
                 // copy sensor data to
                 memcpy(frame.data, &s->start[offset], fragment_size);
                 std::clog << "\t\tframe:" << offset << '/' << fragment_size;
-                // first frame
-                if (!offset) {
+                // frame payload
+                if (!offset) {                                  // first frame
                     frame.length = htobe16(s->packetSize + 8);  // with UDP
                     payload = new pcpp::PayloadLayer(           //
-                        (uint8_t*)&frame, fragment_size + 8);   //
+                        (uint8_t *)&frame, fragment_size + 8);  //
                 } else {                                        // 1+ frame
                     payload = new pcpp::PayloadLayer(           //
                         frame.data, fragment_size);
                 }
-                //
-                std::clog << "\n";
-                //
+                // fragmentation
                 packet->computeCalculateFields();
+                auto ip_hdr = ipv4_layer->getIPv4Header();      // fix IP header
+                ip_hdr->ipId = htobe16(ipId);                   // fragmens id
+                ip_hdr->timeToLive = 5;                         // min TTL
+                ip_hdr->protocol = pcpp::PACKETPP_IPPROTO_UDP;  //
+                //
+                ip_hdr->fragmentOffset =
+                    htobe16(offset + (offset ? 8 : 0) / sizeof(uint16_t));
+                if (offset + Dev::MTU < s->packetSize)
+                    ip_hdr->fragmentOffset |= MF_flag;
+                else
+                    ip_hdr->fragmentOffset &= ~MF_flag;
+                //
+                pcpp::ScalarBuffer<uint16_t> ip_scalar = {
+                    (uint16_t *)ip_hdr,  //
+                    (size_t)(ip_hdr->internetHeaderLength * 4)};
+                assert(ip_scalar.len == 20);
+                ip_hdr->headerChecksum = 0;
+                ip_hdr->headerChecksum =
+                    htobe16(pcpp::computeChecksum(&ip_scalar, 1));
+                //
+                dev->sendPacket(*packet);
+                std::clog << "\n";
             }
         }
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     return true;
 }
-
-// bool Send::run(uint32_t coreId) {  //
-//
-//
-//     pcpp::MBufRawPacket* mbufArr[64] = {};
-//     for (int i = 0; i < 64; i++) {  //
-//         auto raw = packet.getRawPacket();
-//         auto mbuf = new pcpp::MBufRawPacket();
-//         mbuf->initFromRawPacket(raw, dev);
-//         mbufArr[i] = mbuf;
-//     }
-//     while (!_stop) {  //
-//         // dev->sendPacket(packet);
-//         dev->sendPackets(mbufArr, 64, 0);
-//         // std::this_thread::sleep_for(std::chrono::nanoseconds(1));
-//     }
-//     return true;
-// }
