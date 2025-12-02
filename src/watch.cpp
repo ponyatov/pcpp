@@ -1,3 +1,5 @@
+#include <csignal>
+
 #include "pcpp.hpp"
 
 void Watch::watch(char* argv) {  //
@@ -6,8 +8,9 @@ void Watch::watch(char* argv) {  //
     char buf[1024];
     read(fd, buf, sizeof(buf));
     inotify_rm_watch(fd, wd);
-    Dev::stop();
-    exit(1);
+    // raise(SIGINT);
+    Dev::sigint(NULL);
+    // for (;;);
 }
 
 std::vector<std::thread*> Watch::thread;
@@ -16,4 +19,16 @@ void Watch::init(int argc, char* argv[]) {  //
     for (int i = 0; i < argc; i++) {        //
         thread.push_back(new std::thread(Watch::watch, argv[i]));
     }
+}
+
+void Dev::signal() {
+    pcpp::ApplicationEventHandler::getInstance().onApplicationInterrupted(
+        Dev::sigint, NULL);
+}
+
+void Dev::sigint(void*) {  //
+    pcpp::DpdkDeviceList::getInstance().stopDpdkWorkerThreads();
+    dev->close();
+    std::clog << "\ninterrupted:" << dev->getDeviceName() << "\n";
+    _stop = true;
 }

@@ -4,9 +4,10 @@
 pcpp::DpdkDevice* Dev::dev = nullptr;
 pcpp::CoreMask Dev::coreMaskToUse = pcpp::getCoreMaskForAllMachineCores();
 
-void Dev::init(int argc, char* argv[]) {  //
-    Dev::stop();
-    assert(pcpp::DpdkDeviceList::initDpdk(coreMaskToUse, MBufPoolSize));
+void Dev::init(int argc, char* argv[]) {
+    Dev::signal();
+    assert(pcpp::DpdkDeviceList::initDpdk(coreMaskToUse, MBufPoolSize, 0, 0,
+                                          argc, argv, APP));
     assert(dev = pcpp::DpdkDeviceList::getInstance().getDeviceByPort(0));
     std::clog << "dev: " << dev->getDeviceName()           //
               << " id:" << dev->getDeviceId()              //
@@ -30,18 +31,6 @@ void Dev::init(int argc, char* argv[]) {  //
                                                                Dev::workers);
 }
 
-void Dev::stop() {
-    pcpp::ApplicationEventHandler::getInstance().onApplicationInterrupted(
-        Dev::onApplicationInterrupted, NULL);
-}
-
 bool Dev::_stop = false;
-
-void Dev::onApplicationInterrupted(void*) {  //
-    pcpp::DpdkDeviceList::getInstance().stopDpdkWorkerThreads();
-    dev->close();
-    std::clog << "\ninterrupted:" << dev->getDeviceName() << "\n";
-    _stop = true;
-}
 
 std::vector<pcpp::DpdkWorkerThread*> Dev::workers;

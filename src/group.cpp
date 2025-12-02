@@ -11,7 +11,6 @@ bool Group::run(uint32_t coreId) {  //
     sends = 0;
     while (!_stop) {
         // std::clog << "group:" << g->name << " sends:" << ++sends << "\n";
-        // frame = 0;
 
         // sensors loop
         for (auto s : g->sensors) {
@@ -75,7 +74,7 @@ bool Group::run(uint32_t coreId) {  //
                 // std::clog << "\n";
             }
         }
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+        // std::this_thread::sleep_for(std::chrono::nanoseconds(1));
     }
     return true;
 }

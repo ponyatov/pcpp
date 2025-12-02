@@ -19,14 +19,14 @@ class Dev {
     static pcpp::CoreMask coreMaskToUse;
     static pcpp::DpdkDevice* dev;
     static const uint MBufPoolSize = (16 * 1024 - 1);
-
-   public:
-    static const uint MTU = 1400;
-    static void init(int argc, char* argv[]);
     static std::vector<pcpp::DpdkWorkerThread*> workers;
     static bool _stop;
-    static void stop();
-    static void onApplicationInterrupted(void*);
+    static void signal();  ///< register @ref sigint
+
+   public:
+    static void sigint(void*);  ///< SIGINT callback
+    static const uint MTU = 1400;
+    static void init(int argc, char* argv[]);
 };
 
 class Worker : public pcpp::DpdkWorkerThread {
