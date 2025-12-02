@@ -9,6 +9,7 @@ void Dev::init(int argc, char* argv[]) {
     assert(pcpp::DpdkDeviceList::initDpdk(coreMaskToUse, MBufPoolSize, 0, 0,
                                           argc, argv, APP));
     assert(dev = pcpp::DpdkDeviceList::getInstance().getDeviceByPort(0));
+    assert(dev->getMtu() <= Dev::MTU);
     std::clog << "dev: " << dev->getDeviceName()           //
               << " id:" << dev->getDeviceId()              //
               << " mac:" << dev->getMacAddress()           //
