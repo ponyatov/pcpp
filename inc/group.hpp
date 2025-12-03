@@ -1,6 +1,8 @@
 #pragma once
 
-#include "dev.hpp"
+#include "app.hpp"
+#include "types.hpp"
+#include "worker.hpp"
 
 class Group : public Worker {
     pcpp::DpdkDevice::DpdkDeviceStats stats;

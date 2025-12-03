@@ -6,7 +6,8 @@ export DRIVER=vfio-pci
 
 export DPDKPY=lib/pcpp/setup_dpdk.py
 export DPDK_ROOT=/usr/local
-export HUGESIZE=8192
+export HUGESIZE=2048
+# 8192
 
 echo 1 | sudo tee /sys/module/vfio/parameters/enable_unsafe_noiommu_mode
 # cat /sys/module/vfio/parameters/enable_unsafe_noiommu_mode

@@ -1,7 +1,7 @@
-#include "pcpp.hpp"
+#include "app.hpp"
 
 bool Group::run(uint32_t coreId) {  //
-    _coreId = coreId;
+    assert(Worker::run(coreId));
     std::clog << "group:" << g->name      //
               << " core:" << getCoreId()  //
               << "\n";
@@ -76,5 +76,5 @@ bool Group::run(uint32_t coreId) {  //
         }
         // std::this_thread::sleep_for(std::chrono::nanoseconds(1));
     }
-    return true;
+    return terminate();
 }

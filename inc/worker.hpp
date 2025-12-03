@@ -1,0 +1,16 @@
+#pragma once
+
+class Worker : public pcpp::DpdkWorkerThread {
+   protected:
+    pcpp::DpdkDevice* dev;
+    uint32_t _coreId;
+    bool _stop;
+
+   public:
+    static std::atomic<int> active;  ///< active workers count
+    Worker(pcpp::DpdkDevice* dev) : dev(dev) { _stop = false; }
+    void stop() { _stop = true; }
+    uint32_t getCoreId() const { return dev->getCurrentCoreId(); }
+    bool run(uint32_t coreId);
+    bool terminate();
+};

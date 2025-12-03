@@ -1,9 +1,9 @@
-#include "pcpp.hpp"
+#include "app.hpp"
 
 #define M (1024. * 1024.)
 
 bool Stat::run(uint32_t coreId) {  //
-    _coreId = coreId;
+    assert(Worker::run(coreId));
     for (uint n = 0; !_stop; n++) {
         dev->getStatistics(stats);
 
@@ -23,5 +23,5 @@ bool Stat::run(uint32_t coreId) {  //
                   << "\n";
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
-    return true;
+    return terminate();
 }
