@@ -10,11 +10,15 @@ bool Group::run(uint32_t coreId) {  //
     packet->addLayer(eth_layer);
     sends = 0;
     while (!_stop) {
-        // std::clog << "group:" << g->name << " sends:" << ++sends << "\n";
+#ifdef DEBSEND
+        std::clog << "\tgroup:" << g->name << " sends:" << ++sends << "\n";
+#endif
 
         // sensors loop
         for (auto s : g->sensors) {
-            // std::clog << "\tsensor:" << s->name;
+#ifdef DEBSEND
+            std::clog << "\t\tsensor:" << s->name;
+#endif
             packet->removeAllLayersAfter(eth_layer);
             ipv4_layer = new pcpp::IPv4Layer(s->src.ip, s->dst.ip);
             packet->addLayer(ipv4_layer);
@@ -22,11 +26,12 @@ bool Group::run(uint32_t coreId) {  //
             frame.dst = htobe16(s->dst.port);
             frame.length = htobe16(s->packetSize + 8);  // with UDP
             frame.crc = 0;                              // ignore
-            // std::clog                                      //
-            //     << " " << s->src.ip << ':' << s->src.port  //
-            //     << " -> " << s->dst.ip << ':' << s->dst.port;
-            // std::clog << "\n";
-
+#ifdef DEBSEND
+            std::clog                                      //
+                << " " << s->src.ip << ':' << s->src.port  //
+                << " -> " << s->dst.ip << ':' << s->dst.port;
+            std::clog << "\n";
+#endif
             // fragmentation loop
             ipId++;
             for (uint offset = 0; offset < s->packetSize; offset += Dev::MTU) {
@@ -37,7 +42,9 @@ bool Group::run(uint32_t coreId) {  //
                     fragment_size = Dev::MTU;
                 // copy sensor data to
                 memcpy(frame.data, &s->start[offset], fragment_size);
-                // std::clog << "\t\tframe:" << offset << '/' << fragment_size;
+#ifdef DEBSEND
+                std::clog << "\t\t\tframe:" << offset << '/' << fragment_size;
+#endif
                 // frame payload
                 if (!offset) {                                  // first frame
                     frame.length = htobe16(s->packetSize + 8);  // with UDP
@@ -56,7 +63,7 @@ bool Group::run(uint32_t coreId) {  //
                 ip_hdr->protocol = pcpp::PACKETPP_IPPROTO_UDP;  //
                 //
                 ip_hdr->fragmentOffset =
-                    htobe16(offset + (offset ? 8 : 0) / sizeof(uint16_t));
+                    htobe16((offset + (offset ? 8 : 0)) / sizeof(uint64_t));
                 if (offset + Dev::MTU < s->packetSize)
                     ip_hdr->fragmentOffset |= MF_flag;
                 else
@@ -71,10 +78,12 @@ bool Group::run(uint32_t coreId) {  //
                     htobe16(pcpp::computeChecksum(&ip_scalar, 1));
                 //
                 dev->sendPacket(*packet);
-                // std::clog << "\n";
+#ifdef DEBSEND
+                std::clog << "\n";
+#endif
             }
         }
-        // std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(g->freq));
     }
     return terminate();
 }

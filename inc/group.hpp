@@ -30,7 +30,7 @@ class Group : public Worker {
         uint16_t dst;
         uint16_t length = 0;
         uint16_t crc = 0;
-        uint8_t data[Dev::MTU];
+        uint8_t data[Dev::MTU_MAX];
     } frame;
 
    public:

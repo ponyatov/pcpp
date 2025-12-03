@@ -15,6 +15,8 @@
 /// *More Fragments*: fragmentation flag mask
 #define MF_flag 0b00100000
 
+#define DEBSEND
+
 class Dev {
     static pcpp::CoreMask coreMaskToUse;
     static pcpp::DpdkDevice* dev;
@@ -22,7 +24,8 @@ class Dev {
 
    public:
     static void sigint(void*);  ///< SIGINT callback
-    static const uint MTU = 1400;
+    static uint16_t MTU;
+    static const uint16_t MTU_MAX = 1500;
     static void init(int argc, char* argv[]);
     static void stop();
 };
