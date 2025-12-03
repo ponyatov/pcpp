@@ -1,5 +1,9 @@
 #include "app.hpp"
 
+Group::Group(pcpp::DpdkDevice* dev, GROUP* g) : Worker(dev), g(g) {
+    assert(mq = new MQ(dev,g));
+}
+
 bool Group::run(uint32_t coreId) {  //
     assert(Worker::run(coreId));
     std::clog << "group:" << g->name      //
@@ -49,7 +53,7 @@ bool Group::run(uint32_t coreId) {  //
                 if (!offset) {                                  // first frame
                     frame.length = htobe16(s->packetSize + 8);  // with UDP
                     payload = new pcpp::PayloadLayer(           //
-                        (uint8_t *)&frame, fragment_size + 8);  //
+                        (uint8_t*)&frame, fragment_size + 8);   //
                 } else {                                        // 1+ frame
                     payload = new pcpp::PayloadLayer(           //
                         frame.data, fragment_size);
@@ -70,7 +74,7 @@ bool Group::run(uint32_t coreId) {  //
                     ip_hdr->fragmentOffset &= ~MF_flag;
                 //
                 pcpp::ScalarBuffer<uint16_t> ip_scalar = {
-                    (uint16_t *)ip_hdr,  //
+                    (uint16_t*)ip_hdr,  //
                     (size_t)(ip_hdr->internetHeaderLength * 4)};
                 assert(ip_scalar.len == 20);
                 ip_hdr->headerChecksum = 0;
@@ -83,7 +87,7 @@ bool Group::run(uint32_t coreId) {  //
 #endif
             }
         }
-        std::this_thread::sleep_for(std::chrono::nanoseconds(g->freq));
+        std::this_thread::sleep_for(std::chrono::microseconds(g->freq));
     }
     return terminate();
 }

@@ -30,7 +30,6 @@ void Dev::init(int argc, char* argv[]) {
     //
     Stat::single = new Stat(dev);
     for (auto g : config.groups) new Group(dev, g);
-    MQ::test = new MQ(dev);
     //
     pcpp::DpdkDeviceList::getInstance().startDpdkWorkerThreads(  //
         Worker::coreMask, Worker::threads);

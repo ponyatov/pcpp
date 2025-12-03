@@ -3,6 +3,7 @@
 #include "app.hpp"
 #include "types.hpp"
 #include "worker.hpp"
+#include "mq.hpp"
 
 class Group : public Worker {
     pcpp::DpdkDevice::DpdkDeviceStats stats;
@@ -21,6 +22,8 @@ class Group : public Worker {
 
     /// @}
 
+    MQ* mq;
+
     uint sends;  ///< sends counter
 
     // uint frame;  ///< current frame counter
@@ -34,6 +37,7 @@ class Group : public Worker {
     } frame;
 
    public:
-    Group(pcpp::DpdkDevice* dev, GROUP* g) : Worker(dev), g(g) {}
+    Group(pcpp::DpdkDevice* dev, GROUP* g);
     bool run(uint32_t coreId);
+    std::string name() { return g->name; }
 };

@@ -1,18 +1,18 @@
 #pragma once
 
-#include <zmq.hpp>
+#include "app.hpp"
+#include "libc.hpp"
+#include "group.hpp"
 
 class MQ : public Worker {
     zmq::context_t *context;
+    std::string *endpoint;
     zmq::socket_t *pull;
     zmq::socket_t *push;
 
-    std::string *endpoint;
-
    public:
-    static MQ *test;
-    MQ();
+    MQ(pcpp::DpdkDevice* dev, GROUP* g);
     ~MQ();
-    MQ(pcpp::DpdkDevice *dev);
     bool run(uint32_t coreId);
+    void send(std::string message);
 };
