@@ -22,17 +22,15 @@ void Dev::init(int argc, char* argv[]) {
               << "\n";
     assert(dev->openMultiQueues(1, 1));
     uint32_t coreMask = 0;
-    Dev::workers.push_back(new Stat(dev));
+    Worker::threads.push_back(new Stat(dev));
     coreMask = (coreMask << 1) | 0b10;
     for (auto g : config.groups) {
-        Dev::workers.push_back(new Group(dev, g));
+        Worker::threads.push_back(new Group(dev, g));
         coreMask = (coreMask << 1) | 0b10;
     }
-    pcpp::DpdkDeviceList::getInstance().startDpdkWorkerThreads(coreMask,
-                                                               Dev::workers);
+    pcpp::DpdkDeviceList::getInstance().startDpdkWorkerThreads(  //
+        coreMask, Worker::threads);
 }
-
-std::vector<pcpp::DpdkWorkerThread*> Dev::workers;
 
 void Dev::signal() {
     pcpp::ApplicationEventHandler::getInstance().onApplicationInterrupted(
@@ -41,19 +39,10 @@ void Dev::signal() {
 
 void Dev::stop() {
     std::clog << "\nstop:" << dev->getDeviceName();
-    int timeout = 0;
-    while (Worker::active.load(std::memory_order_relaxed)) {
-        std::clog << " " << Worker::active.load(std::memory_order_relaxed);
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        if (++timeout > 2222) {
-            std::clog << " aborted\n\n";
-            break;
-        }
-    }
-    std::clog << "\n";
     pcpp::DpdkDeviceList::getInstance().stopDpdkWorkerThreads();
+    assert(!Worker::active.load(std::memory_order_relaxed));
     dev->close();
-    std::clog << "\ninterrupted:" << dev->getDeviceName() << "\n";
+    std::clog << " closed\n\n" << dev->getDeviceName() << "\n";
     exit(-1);
 }
 

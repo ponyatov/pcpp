@@ -7,7 +7,8 @@ class Worker : public pcpp::DpdkWorkerThread {
     bool _stop;
 
    public:
-    static std::atomic<int> active;  ///< active workers count
+    static std::vector<pcpp::DpdkWorkerThread*> threads;  ///<
+    static std::atomic<int> active;                   ///< active workers count
     Worker(pcpp::DpdkDevice* dev) : dev(dev) { _stop = false; }
     void stop() { _stop = true; }
     uint32_t getCoreId() const { return dev->getCurrentCoreId(); }
