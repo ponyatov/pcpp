@@ -7,9 +7,10 @@ class Worker : public pcpp::DpdkWorkerThread {
     bool _stop;
 
    public:
+    static uint32_t coreMask;
     static std::vector<pcpp::DpdkWorkerThread*> threads;  ///<
-    static std::atomic<int> active;                   ///< active workers count
-    Worker(pcpp::DpdkDevice* dev) : dev(dev) { _stop = false; }
+    static std::atomic<int> active;  ///< active workers count
+    Worker(pcpp::DpdkDevice* dev);   ///<
     void stop() { _stop = true; }
     uint32_t getCoreId() const { return dev->getCurrentCoreId(); }
     bool run(uint32_t coreId);

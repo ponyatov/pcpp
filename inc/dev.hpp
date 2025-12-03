@@ -19,7 +19,6 @@ class Dev {
     static pcpp::CoreMask coreMaskToUse;
     static pcpp::DpdkDevice* dev;
     static const uint MBufPoolSize = (16 * 1024 - 1);
-    static void signal();  ///< register @ref sigint
 
    public:
     static void sigint(void*);  ///< SIGINT callback
