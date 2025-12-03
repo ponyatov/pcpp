@@ -22,7 +22,7 @@ bool Stat::run(uint32_t coreId) {  //
 
         const std::string request_str = "Hello";
         auto buf = zmq::buffer(request_str);
-        zmq::message_t request(buf);
+        // zmq::message_t request(buf);
         // MQ::test->sock()->send(request, zmq::send_flags::none);
 
         // const std::string request_str = "Hello";

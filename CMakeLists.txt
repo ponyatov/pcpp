@@ -46,5 +46,6 @@ add_executable(${CMAKE_PROJECT_NAME}
 target_link_libraries(${CMAKE_PROJECT_NAME}
     -Wl,--start-group ${L} -lzmq -Wl,--end-group
 ) # -static
+add_compile_options(-pthread)
 
 include(install) # target install
