@@ -28,8 +28,9 @@ void Dev::init(int argc, char* argv[]) {
               << "\n";
     assert(dev->openMultiQueues(1, 1));
     //
-    new Stat(dev);
+    Stat::single = new Stat(dev);
     for (auto g : config.groups) new Group(dev, g);
+    MQ::test = new MQ(dev);
     //
     pcpp::DpdkDeviceList::getInstance().startDpdkWorkerThreads(  //
         Worker::coreMask, Worker::threads);
