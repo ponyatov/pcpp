@@ -5,3 +5,4 @@ gdb gdbserver valgrind
 flex bison ragel libreadline-dev
 tshark net-tools arping
 libpcap-dev dpdk-dev libdpdk-dev
+cppzmq-dev

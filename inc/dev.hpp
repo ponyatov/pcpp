@@ -15,7 +15,7 @@
 /// *More Fragments*: fragmentation flag mask
 #define MF_flag 0b00100000
 
-#define DEBSEND
+// #define DEBSEND
 
 class Dev {
     static pcpp::CoreMask coreMaskToUse;

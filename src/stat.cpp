@@ -12,14 +12,10 @@ bool Stat::run(uint32_t coreId) {  //
                   << " mac:" << dev->getMacAddress()                      //
                   << " mbuf:" << dev->getAmountOfMbufsInUse()             //
                   << '/' << dev->getAmountOfFreeMbufs()                   //
-                  << " packets:" << stats.aggregatedRxStats.packets       //
-                  << '/' << stats.aggregatedTxStats.packets               //
-                  << " pps:" << stats.aggregatedRxStats.packetsPerSec     //
-                  << '/' << stats.aggregatedTxStats.packetsPerSec         //
-                  << " mbytes:" << stats.aggregatedRxStats.bytes / M      //
-                  << '/' << stats.aggregatedTxStats.bytes / M             //
-                  << " mbps:" << stats.aggregatedRxStats.bytesPerSec / M  //
-                  << '/' << stats.aggregatedTxStats.bytesPerSec / M       //
+                  << " packets:" << stats.aggregatedTxStats.packets       //
+                  << " pps:" << stats.aggregatedTxStats.packetsPerSec     //
+                  << " mbytes:" << stats.aggregatedTxStats.bytes / M      //
+                  << " mbps:" << stats.aggregatedTxStats.bytesPerSec / M  //
                   << "\n";
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }

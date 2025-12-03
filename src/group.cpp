@@ -83,7 +83,7 @@ bool Group::run(uint32_t coreId) {  //
 #endif
             }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(g->freq));
+        std::this_thread::sleep_for(std::chrono::nanoseconds(g->freq));
     }
     return terminate();
 }
