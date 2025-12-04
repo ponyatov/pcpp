@@ -3,5 +3,5 @@ all: bin/$(APP)
 run: bin/$(APP)
 	$^
 watch: bin/$(APP)
-	@$^ ; while [ true ]; do $^ ; done
-# 	@$^ ; while [ $$? -eq 1 ]; do $^ ; done
+	@$^ ; while [ $$? -eq 1 ]; do $^ ; done
+#	@$^ ; while [ true ]; do $^ ; done
